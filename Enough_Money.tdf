@@ -1,0 +1,14 @@
+SUBDESIGN Enough_Money
+(	money[8..0]	:INPUT;
+	enough		:OUTPUT;)	
+		
+
+BEGIN
+	
+	-- Made by: Nicholas Schwalb, Savan Patel, Jonathan Kenny
+	IF money[8..0] > 69 THEN enough = VCC;
+	ELSE enough = GND;
+	END IF;
+	
+	
+END;

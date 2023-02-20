@@ -1,0 +1,37 @@
+SUBDESIGN nine_counter
+(	sec_clock, vend, clock	:INPUT;
+	toggle, counter_out[3..0], reset	:OUTPUT;)
+	
+VARIABLE	
+
+	counter[3..0] :DFF;
+	count_down	:MACHINE WITH STATES
+			( counting);
+		
+
+BEGIN
+-- Made by: Nicholas Schwalb, Savan Patel, Jonathan Kenny
+	counter[].clk = sec_clock;
+	
+	counter_out[] = counter[].q;
+	
+	count_down.clk = sec_clock;												 --Turning clock for every second
+	count_down.ena = vend;
+	IF !vend THEN counter[] = 0;
+	END IF;																			--Enabling clock when we have a valid output
+	IF vend THEN counter[] = 9;
+	END IF;
+	CASE count_down IS 
+	
+		WHEN counting => 
+		
+							 IF counter[].q > 0 THEN counter[].d = counter[].q - 1;
+														  toggle = VCC;								--Counting down from 9 and afterwards stopping the count and turning everything off
+							 ELSIF counter[].q == 0 THEN toggle = GND;
+							 
+							 ELSE counter[].d = counter[].q;
+									
+							 END IF;
+							 
+	END CASE;
+END;

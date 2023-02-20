@@ -1,0 +1,26 @@
+SUBDESIGN 1sec
+(	clock	:INPUT;
+	sec_output		:OUTPUT;)
+	
+VARIABLE	
+
+	clockbit[25..0] :DFF;
+	clock_sec :MACHINE WITH STATES
+			( second);	
+
+BEGIN
+	
+	clock_sec.clk = clock;														-- Setting computing to always be going
+	clock_sec.ena = VCC;
+	CASE clock_sec IS
+		WHEN second =>
+							IF clockbit[] < 25000000 THEN clockbit[] = clockbit[] + 1;
+								ELSE clockbit[] = 0;
+								IF sec_output THEN sec_output = GND;
+									ELSE sec_output = VCC;
+								END IF;
+							END IF;
+					
+	END CASE;
+	
+END;

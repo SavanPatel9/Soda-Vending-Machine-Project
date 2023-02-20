@@ -1,0 +1,29 @@
+SUBDESIGN Money_Input
+(	nickle, dime, quarter, dollar, reset, toggle, clock, enable	:INPUT;
+	money_out[8..0]		:OUTPUT;)
+	
+VARIABLE	
+
+	money[8..0] :DFFE;
+
+BEGIN
+
+	-- Made by: Nicholas Schwalb, Savan Patel, Jonathan Kenny
+	money[].clk = clock;
+	money[].clrn = !reset;
+	money[].ena = enable;
+
+	IF !toggle THEN
+		IF nickle THEN money[].d = money[].q + 5;				-- Adding 5 to money if we input nickle
+		ELSIF dime THEN money[].d = money[].q + 10;			-- Adding 10 to money if we input dime
+		ELSIF quarter THEN money[].d = money[].q + 25;      -- Adding 25 to money if we input quarter
+		ELSIF dollar THEN money[].d = money[].q + 100;      -- Adding 100 to money if we input dollar
+		ELSE money[].d = money[].q;
+		END IF;
+	ELSE money[].d = 0;
+	END IF;	
+	money_out[] = money[].q;
+
+	
+	
+END;
